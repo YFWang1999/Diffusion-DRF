@@ -7,15 +7,23 @@ guidance 6.0, shift 3, TeaCache threshold 0.10).
 
 ## VBench-2.0
 
-1. Take the prompt lists of the VBench-2.0 repository. We use its prompt-augmented prompts
-   for Wan, as recommended there for models trained on long captions.
-2. Sample the required number of videos per prompt with `--seed -1` (fresh noise per video),
-   one run per sample index, for the base model and for each checkpoint.
-3. Rename the videos to the file-name convention expected by VBench-2.0 and run its
-   evaluation script on each dimension.
+1. Take the prompt lists of the VBench-2.0 repository. Sampling uses its prompt-augmented
+   prompts for Wan (`prompts/prompt_aug/Wanx_full_text_aug.txt`), as recommended there for
+   models trained on long captions.
+2. Sample three videos per prompt with fresh noise, i.e. three runs of
+   `inference/predict_t2v.py --seed -1` into three folders, for the base model and for each
+   checkpoint. The Diversity dimension has its own prompt list and needs more samples per
+   prompt; follow the VBench-2.0 instructions for it.
+3. Copy each run to the VBench-2.0 naming scheme (`<prompt>-<index>.mp4`), using the
+   original prompt list (same order as the augmented one) for the names:
 
-`predict_t2v.py` names videos by the 1-based line index of the prompt file
-(`00000001.mp4`, ...), so the mapping back to prompts is the prompt file itself.
+   ```bash
+   python evaluation/rename_for_vbench2.py --video_dir samples/drf_run0 \
+     --prompt_file /path/to/VBench-2.0/prompts/VBench2_full_text.txt \
+     --output_dir samples/drf_vbench2 --sample_index 0
+   ```
+
+4. Run the VBench-2.0 evaluation script on the renamed folder.
 
 ## VideoGen-Eval pairwise comparison
 

@@ -426,8 +426,7 @@ def main():
 
     if args.seed is not None:
         set_seed(args.seed, device_specific=True)
-    if accelerator.is_main_process:
-        os.makedirs(args.output_dir, exist_ok=True)
+    os.makedirs(args.output_dir, exist_ok=True)
 
     weight_dtype = torch.float16 if accelerator.mixed_precision == "fp16" else torch.bfloat16
 

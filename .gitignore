@@ -1,0 +1,21 @@
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# weights, data and outputs are never committed
+/models/
+/output/
+/outputs/
+/samples/
+/wandb/
+data/videos/
+data/*.tsv
+!data/example_annotations.tsv
+*.mp4
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+
+# internal notes
+RELEASE_TODO.md

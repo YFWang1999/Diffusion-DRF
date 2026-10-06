@@ -1,0 +1,25 @@
+# Tested with Python 3.10-3.12 and PyTorch 2.5-2.10 (CUDA 12.x).
+# Install the PyTorch build that matches your CUDA version first, then:
+#   pip install -r requirements.txt
+torch>=2.5.1
+torchvision
+transformers==4.57.1
+diffusers>=0.31.0
+accelerate>=1.0.0
+safetensors
+einops
+omegaconf
+pandas
+numpy
+decord
+opencv-python
+imageio[ffmpeg]
+ftfy
+sentencepiece
+protobuf
+packaging
+tqdm
+tensorboard
+qwen-vl-utils
+datasets
+scipy

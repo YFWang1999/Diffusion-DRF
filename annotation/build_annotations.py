@@ -47,6 +47,13 @@ def answer_on_video(model, processor, video_path: str, question: str, num_frames
     return processor.decode(output_ids[0][inputs.input_ids.shape[1]:], skip_special_tokens=True)
 
 
+def strip_code_fence(answer: str) -> str:
+    """Remove a surrounding ```json ... ``` fence so that the reference answer is plain JSON."""
+    answer = answer.strip()
+    match = re.match(r"^```(?:json)?\s*(.*?)\s*```$", answer, re.DOTALL)
+    return match.group(1) if match else answer
+
+
 def is_yes(answer: str) -> bool:
     match = re.search(r'"answer"\s*:\s*"?(\w+)', answer)
     return match is not None and match.group(1).lower() == "yes"
@@ -62,8 +69,9 @@ def main():
     parser.add_argument("--vlm_path", type=str, default="Qwen/Qwen2.5-VL-7B-Instruct")
     parser.add_argument("--num_frames", type=int, default=16, help="Frames of the real video shown to the VLM.")
     parser.add_argument("--max_new_tokens", type=int, default=512)
-    parser.add_argument("--keep_only_all_yes", action="store_true",
-                        help="Drop a video entirely unless every TA reference answer is `Yes`.")
+    parser.add_argument("--keep_all_answers", action="store_true",
+                        help="Keep TA queries whose reference answer is `No`. By default only queries "
+                             "answered `Yes` on the real video are kept, as in the released annotations.")
     parser.add_argument("--num_shards", type=int, default=1)
     parser.add_argument("--shard_index", type=int, default=0)
     args = parser.parse_args()
@@ -94,9 +102,12 @@ def main():
                 if not description or description.rstrip(".").lower() == NOT_STATED.rstrip(".").lower():
                     continue
                 question = build_ta_question(category, description)
-                answer = answer_on_video(model, processor, video_path, question, args.num_frames, args.max_new_tokens)
-                queries.append((question, answer))
-            if args.keep_only_all_yes and not all(is_yes(answer) for _, answer in queries):
+                answer = strip_code_fence(
+                    answer_on_video(model, processor, video_path, question, args.num_frames, args.max_new_tokens)
+                )
+                if args.keep_all_answers or is_yes(answer):
+                    queries.append((question, answer))
+            if not queries:
                 continue
             queries.append((build_phy_question(row.prompt), PHY_REFERENCE_ANSWER))
 

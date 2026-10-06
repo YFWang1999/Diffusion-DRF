@@ -29,12 +29,17 @@ file; `--mix_loss` adds it to every sampled row at training time.
   question text mentions "the first 24 frames" and "the last 12 frames"; the training script
   rewrites these to the actual `--num_frames` and `--ref_frames_num_phy`.
 
-## Annotations of the paper
+## Released annotations
 
-The annotations used in the paper cover 5,077 captioned videos and 24,252 queries
-(19,175 TA and 5,077 Phy). They will be made available on the project page. The videos
-themselves come from public datasets and must be downloaded from their original sources and
-placed under `--video_root` following the relative paths in `real_video_path`.
+The released annotation file `drf_train_annotations.tsv` covers 10,982 captioned videos from
+[OpenVid-1M](https://huggingface.co/datasets/nkp37/OpenVid-1M) and 45,971 queries
+(34,989 TA and 10,982 Phy). Only TA queries whose reference answer on the real video is `Yes`
+are kept. It will be made available on the project page; `example_annotations.tsv` in this
+folder shows the format on four videos.
+
+The videos themselves must be downloaded from OpenVid-1M. `real_video_path` is of the form
+`OpenVid/OpenVid_part<k>/<video_id>.mp4`, i.e. relative to a `--video_root` that contains the
+extracted OpenVid-1M parts in a folder named `OpenVid`.
 
 ## Annotating your own videos
 

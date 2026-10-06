@@ -106,25 +106,17 @@ def build_phy_question(caption: str) -> str:
         "- Abnormal motion – e.g., inertia/acceleration violations, teleporting, time reversals, jitter not explained by camera motion.\n"
         "- Unnatural interpenetration – e.g., objects passing through each other or ground, missing collisions/contacts.\n"
         "If the prompt doesn't have related physical aspects, you should answer 'No'.\n"
-        "Output strictly as JSON with this schema (no extra text):\n"
-        "{\n"
-        "    \"liquid_flow_irregularity\": \"Yes/No\",\n"
-        "    \"abnormal_deformation\":  \"Yes/No\",\n"
-        "    \"abnormal_texture_change\":    \"Yes/No\",  \n"
-        "    \"abnormal_motion\":   \"Yes/No\",  \n"
-        "    \"unnatural_interpenetration\":  \"Yes/No\",\n"
-        "}\n"
     )
 
 
 # A real reference video is free of physics defects by construction, so the reference answer of
 # the Phy query is the same for every sample.
 PHY_REFERENCE_ANSWER = (
-    "```json\n{\n"
+    "{\n"
     "    \"liquid_flow_irregularity\": \"No\",\n"
     "    \"abnormal_deformation\": \"No\",\n"
     "    \"abnormal_texture_change\": \"No\",\n"
     "    \"abnormal_motion\": \"No\",\n"
     "    \"unnatural_interpenetration\": \"No\"\n"
-    "}\n```"
+    "}"
 )

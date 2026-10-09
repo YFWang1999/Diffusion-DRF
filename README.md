@@ -1,7 +1,12 @@
 # Diffusion-DRF: Free, Rich, and Differentiable Reward for Video Diffusion Fine-Tuning
 
-Official code of **Diffusion-DRF** (NeurIPS 2026).
-[Project page](https://snap-research.github.io/diffusion-drf/)
+**Unofficial, third-party reproduction** of **Diffusion-DRF** (NeurIPS 2026).
+[Paper](https://arxiv.org/abs/2601.04153) | [Official project page](https://snap-research.github.io/diffusion-drf/)
+
+> **Note.** This repository is a third-party reproduction and **not the official release**.
+> We do not have access to the H3AE decoder used in the paper, so the public LightVAE is
+> borrowed as a substitute in the reward path (see [Weights](#weights)). Results obtained with
+> this code may differ from the numbers reported in the paper.
 
 Diffusion-DRF (Differentiable Reward Flow) fine-tunes a text-to-video diffusion model with
 feedback from a **frozen, off-the-shelf vision-language model (VLM)**. No reward model is
@@ -45,9 +50,9 @@ huggingface-cli download lightx2v/Autoencoders lightvaew2_1.safetensors --local-
 ```
 
 **Reward-path decoder.** Decoding 49 frames with gradients through the official Wan2.1 VAE is
-very memory hungry. The paper used a lightweight decoder (H3AE) in the reward path; this
-release uses the public LightVAE instead, a channel-pruned Wan2.1 VAE that shares its latent
-space and loads into the same model class. On a 512x288, 49-frame clip, decoding plus
+very memory hungry. The paper uses a lightweight H3AE decoder in the reward path. We do not
+have access to H3AE, so this reproduction borrows the public LightVAE as a substitute, a
+channel-pruned Wan2.1 VAE that shares its latent space and loads into the same model class. On a 512x288, 49-frame clip, decoding plus
 back-propagation takes about 14.5 GB with LightVAE, while the official VAE does not fit on a
 48 GB GPU. Pass `--reward_decoder wan` to use the official VAE. Sampling at inference time
 always uses the official VAE.
@@ -55,7 +60,7 @@ always uses the official VAE.
 ## Data
 
 Training needs captioned real videos and an annotation file with one structured query per
-row. The format, and how to obtain the annotations used in the paper, is described in
+row. The format is described in
 [`data/README.md`](data/README.md). To annotate your own captioned videos, see
 [Annotation pipeline](#annotation-pipeline).
 
@@ -70,7 +75,7 @@ VIDEO_ROOT=data/videos \
 bash scripts/train_drf.sh
 ```
 
-`scripts/train_drf.sh` is the main setting of the paper: 512x288, 49 frames, 25 denoising
+`scripts/train_drf.sh` follows the main setting described in the paper: 512x288, 49 frames, 25 denoising
 steps with classifier-free guidance 6.0, `N_f = 10` generated frames and 10 reference frames
 for the critic, gradients through the last 3 denoising steps, AdamW with learning rate 1e-5,
 one sample per GPU on 16 GPUs. Checkpoints are written every 500 steps to
@@ -106,7 +111,7 @@ python inference/predict_t2v.py \
 ```
 
 Omit `--transformer_path` to sample from the base model. The defaults are the sampling
-settings of the paper's evaluation: 512x288, 49 frames, 30 steps, guidance 6.0, shift 3 and
+settings of this reproduction: 512x288, 49 frames, 30 steps, guidance 6.0, shift 3 and
 TeaCache with threshold 0.10. See [`evaluation/README.md`](evaluation/README.md) for the
 benchmark protocol.
 
@@ -122,8 +127,7 @@ python build_annotations.py --captions captions.tsv --decompositions decompositi
 ```
 
 `captions.tsv` is tab-separated with the columns `video_id`, `real_video_path`, `prompt`.
-The question templates are in `annotation/prompts.py`; the TA and Phy templates are exactly
-those of the released annotations. Both scripts accept `--num_shards/--shard_index` to
+The question templates are in `annotation/prompts.py`. Both scripts accept `--num_shards/--shard_index` to
 spread the work over several GPUs.
 
 ## Repository layout

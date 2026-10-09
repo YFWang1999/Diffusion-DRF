@@ -71,7 +71,7 @@ def main():
     parser.add_argument("--max_new_tokens", type=int, default=512)
     parser.add_argument("--keep_all_answers", action="store_true",
                         help="Keep TA queries whose reference answer is `No`. By default only queries "
-                             "answered `Yes` on the real video are kept, as in the released annotations.")
+                             "answered `Yes` on the real video are kept.")
     parser.add_argument("--num_shards", type=int, default=1)
     parser.add_argument("--shard_index", type=int, default=0)
     args = parser.parse_args()

@@ -24,8 +24,8 @@ from einops import rearrange
 # --------------------------------------------------------------------------------------
 # The VQ query is the same for every training sample, so it is built here instead of being
 # stored in the annotation file. The wording (including the doubled quotes, an artefact of
-# how the prompt was first stored) is kept exactly as used for the paper's experiments,
-# because the cached reference answer below is tied to it.
+# how the prompt was first stored) is kept fixed, because the reference answer below is
+# tied to it.
 def build_vq_question(num_frames: int, num_ref_frames: int) -> str:
     return f'''Compare the test video (the first {num_frames} frames) to the reference frame (the last {num_ref_frames} frame) and decide if the video shows obvious visual-quality (VQ) defects relative to the reference.\nConsider only: blur (defocus/motion), compression artifacts (blocking/ringing/mosquito), noise/grain, banding, flicker, rolling-shutter, aliasing/moire, over-smoothing and detail loss vs reference (missing fine textures/micro-contrast).\nReturn ONLY this JSON (no timestamps):\n{{\n  ""has_obvious_defect"": Yes | No,\n  ""dominant_issue"": ""none|defocus_blur|motion_blur|blocking|ringing|mosquito_noise|grain_noise|banding|flicker|rolling_shutter|aliasing|moire|over_smoothing|detail_loss"",\n  ""detail_loss_vs_reference"": Yes | No,\n  ""evidence"": [""short visual cues vs reference, e.g., 'softer edges than reference', 'block edges visible around text', 'fine fabric texture missing vs reference'""],\n}}\nRules:\n- Compare against the reference frames’ look (sharpness, texture, edges, tones).'''
 
@@ -185,8 +185,7 @@ class QwenReward:
             video_batch.append(batch_frames[0])
             if self.mix_loss:
                 # NOTE: the frame counts quoted in the VQ question are derived from the
-                # length of the *question* clip. This is how the paper's models were
-                # trained, so it is kept as is.
+                # length of the *question* clip.
                 clip_len = len(batch_frames[0])
                 vq_question = build_vq_question(self.num_frames, clip_len - self.num_frames)
                 texts.append(self._chat_text(vq_question, VQ_REFERENCE_ANSWER))

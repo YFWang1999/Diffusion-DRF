@@ -1,7 +1,7 @@
 """Prompt templates of the automatic annotation pipeline.
 
-The text-video alignment (TA) and physics (Phy) templates below are exactly the ones behind
-the released training annotations; the visual-quality (VQ) query is identical for every
+The text-video alignment (TA) and physics (Phy) templates below produce the annotation file
+format described in ``data/README.md``; the visual-quality (VQ) query is identical for every
 sample and lives in ``videox_fun/reward/reward_fn.py``.
 """
 
@@ -76,7 +76,7 @@ Your answer:
 
 # ---- Step 2: structured queries ---------------------------------------------------------------
 def build_ta_question(category: str, description: str) -> str:
-    """Text-video alignment query for one decomposed component (verbatim training template)."""
+    """Text-video alignment query for one decomposed component (training template)."""
     return (
         f"Given this AI-generated video, does it successfully fulfill the '{category}' condition: {description}? "
         "Respond with 'Yes' or 'No', Answer 'Yes' if the video largely matches the description. "
@@ -88,7 +88,7 @@ def build_ta_question(category: str, description: str) -> str:
 
 
 def build_phy_question(caption: str) -> str:
-    """Reference-guided physics query (verbatim training template).
+    """Reference-guided physics query (training template).
 
     The frame counts in the text ("first 24 frames" / "last 12 frames") are placeholders that
     the training script rewrites to the actual numbers of generated and reference frames.

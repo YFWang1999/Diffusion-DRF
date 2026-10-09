@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Diffusion-DRF on Wan2.1-T2V-1.3B with a frozen Qwen2.5-VL-7B critic (main setting of the paper).
+# Diffusion-DRF on Wan2.1-T2V-1.3B with a frozen Qwen2.5-VL-7B critic (following the main setting of the paper).
 #
-# The paper's runs used 16 x A100-80GB (one sample per GPU, effective batch size 16).
+# The paper reports 16 x A100-80GB (one sample per GPU, effective batch size 16).
 # Adjust the paths below, or override them from the environment.
 set -euo pipefail
 

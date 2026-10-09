@@ -22,7 +22,7 @@ This repository contains
 ## Installation
 
 ```bash
-git clone <this repository> && cd Diffusion-DRF
+git clone https://github.com/YFWang1999/Diffusion-DRF.git && cd Diffusion-DRF
 # install the PyTorch build matching your CUDA version first
 pip install -r requirements.txt
 pip install flash-attn --no-build-isolation   # optional, speeds up the VLM

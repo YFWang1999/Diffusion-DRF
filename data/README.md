@@ -29,9 +29,9 @@ file; `--mix_loss` adds it to every sampled row at training time.
   question text mentions "the first 24 frames" and "the last 12 frames"; the training script
   rewrites these to the actual `--num_frames` and `--ref_frames_num_phy`.
 
-## Annotations of this reproduction
+## Annotations of this reimplementation
 
-The annotation file used in this reproduction, `drf_train_annotations.tsv`, covers 10,982 captioned videos from
+The annotation file used in this reimplementation, `drf_train_annotations.tsv`, covers 10,982 captioned videos from
 [OpenVid-1M](https://huggingface.co/datasets/nkp37/OpenVid-1M) and 45,971 queries
 (34,989 TA and 10,982 Phy). Only TA queries whose reference answer on the real video is `Yes`
 are kept. It is not part of this repository because of its size; `example_annotations.tsv` in

@@ -1,11 +1,11 @@
 # Diffusion-DRF: Free, Rich, and Differentiable Reward for Video Diffusion Fine-Tuning
 
-**Unofficial, third-party reproduction** of **Diffusion-DRF** (NeurIPS 2026).
+**Reimplementation** of **Diffusion-DRF** (NeurIPS 2026).
 [Paper](https://arxiv.org/abs/2601.04153) | [Official project page](https://snap-research.github.io/diffusion-drf/)
 
-> **Note.** This repository is a third-party reproduction and **not the official release**.
-> We do not have access to the H3AE decoder used in the paper, so the public LightVAE is
-> borrowed as a substitute in the reward path (see [Weights](#weights)). Results obtained with
+> **Note.** This repository is a reimplementation of the paper's method.
+> The H3AE decoder used in the paper is not available here, so the public LightVAE is
+> used as a substitute in the reward path (see [Weights](#weights)). Results obtained with
 > this code may differ from the numbers reported in the paper.
 
 Diffusion-DRF (Differentiable Reward Flow) fine-tunes a text-to-video diffusion model with
@@ -51,7 +51,7 @@ huggingface-cli download lightx2v/Autoencoders lightvaew2_1.safetensors --local-
 
 **Reward-path decoder.** Decoding 49 frames with gradients through the official Wan2.1 VAE is
 very memory hungry. The paper uses a lightweight H3AE decoder in the reward path. We do not
-have access to H3AE, so this reproduction borrows the public LightVAE as a substitute, a
+have access to H3AE, so this reimplementation uses the public LightVAE as a substitute, a
 channel-pruned Wan2.1 VAE that shares its latent space and loads into the same model class. On a 512x288, 49-frame clip, decoding plus
 back-propagation takes about 14.5 GB with LightVAE, while the official VAE does not fit on a
 48 GB GPU. Pass `--reward_decoder wan` to use the official VAE. Sampling at inference time
@@ -111,7 +111,7 @@ python inference/predict_t2v.py \
 ```
 
 Omit `--transformer_path` to sample from the base model. The defaults are the sampling
-settings of this reproduction: 512x288, 49 frames, 30 steps, guidance 6.0, shift 3 and
+settings of this reimplementation: 512x288, 49 frames, 30 steps, guidance 6.0, shift 3 and
 TeaCache with threshold 0.10. See [`evaluation/README.md`](evaluation/README.md) for the
 benchmark protocol.
 

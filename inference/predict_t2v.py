@@ -1,7 +1,7 @@
 """Text-to-video sampling with Wan2.1-T2V, optionally loading a Diffusion-DRF checkpoint.
 
 One video is written per line of the prompt file as ``<save_dir>/<8-digit index>.mp4``.
-The defaults are the sampling setup of this reproduction
+The defaults are the sampling setup of this reimplementation
 (512x288, 49 frames, 30 steps, guidance 6.0, shift 3, TeaCache threshold 0.10).
 """
 import argparse
